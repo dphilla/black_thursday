@@ -118,9 +118,17 @@ class SalesAnalyst
     invoices.reduce(:+)
   end
 
-  def top_revenue_earners(x)
+  def top_revenue_earners(x) #stuck here
     # brings in top x revenue earners, if no argument is given, just returns
     # top 20 revenue earners in an array
+      top_earners = []
+      revenue_sorted_from_most_down  =  merchant_ids_to_revenue_hash.keys.sort.reverse
+      x_revenues = revenue_sorted_from_most_down[0..(x-1)]
+      x_revenues.each do |revenue|
+      top_earners <<  merchant_ids_to_revenue_hash.key(revenue)
+      end
+    top_earners.map { |merchant_id|  @se.merchants.find_by_id(merchant_id)}
+      top_earners
 
     #returns ordered array by revenue (largest to small)
   end

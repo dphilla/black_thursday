@@ -130,12 +130,30 @@ module Stats
     hash
   end
 
-  def merchant_ids_to_revenue_hash
-    revenue_hash = invoice_ids_per_merchant_id_hash.each do |key, value|
+  def merchant_ids_to_revenue_hash #stuck here
       #value become arrays of inoice_item_id, each of those elements is turned into
       #revenue, revenue is then reduced(:+) into a sum
       #this replaces the elements in invoice_ids_per_merchant_id_hash
       #this is then summed to give total reveneuw per merchant
+      revenue_hash = {}
+      revenue_hash = invoice_ids_per_merchant_id_hash.each_value do |value|
+        temp = []
+        value.each do |invoice_id|
+          temp << @se.invoices.get_invoice_items_for_invoice(invoice_id)
+          temp.each do |invoice_item_id|
+            invoice_i = @se.invoice_items.find_by_id(invoice_item_id)
+            invoice_i.unit_price.to_i * invoice_i.quantity
+            end
+            var = temp.reduce(:+)
+          end
+          value
+        end
+
+      revenue_hash
     end
-  end
+
+
+
+
+
 end
